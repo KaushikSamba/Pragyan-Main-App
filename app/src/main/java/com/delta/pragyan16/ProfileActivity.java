@@ -41,6 +41,14 @@ public class ProfileActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             //Logout
+            SharedPreferences.Editor editor = Utilities.sp.edit();
+            editor.putInt("status", 0);
+            editor.putString("pragyan_mail", null);
+            editor.putString("pragyan_pass", null);
+            editor.apply();
+            Intent intent = new Intent(ProfileActivity.this, SplashScreen.class);
+            startActivity(intent);
+            finish();
 
             return true;
         }

@@ -10,7 +10,7 @@
     android:background="@color/pragyan_dark_grey"
     tools:context="com.delta.pragyan16.LoginActivity">
 
-    <TextView
+    <com.delta.pragyan16.fTextView
         android:id="@+id/welcomeToFestember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,9 +34,11 @@
             android:textColorHint="@color/white"
             android:layout_weight="1"
             android:hint="Email ID"
+
+            android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -56,16 +58,18 @@
             android:layout_weight="1"
             android:hint="Password"
             android:inputType="textPassword"
-            android:textSize="20sp" />
+            android:imeOptions="actionDone"
+            android:textSize="18sp" />
 
         <CheckBox
             android:id="@+id/showPasswordCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+
             android:layout_gravity="center_vertical"
-            android:text="Show"
-            android:textSize="20sp" />
+            android:text=""
+
+            android:textSize="16sp" />
     </LinearLayout>
 
     <Button
@@ -82,14 +86,14 @@
         android:textSize="35sp" />
 
 
-    <TextView
+    <com.delta.pragyan16.fTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New user? Click here"
         android:textColor="@color/white"
         android:id="@+id/registerText"
         android:layout_marginTop="10dp"
-        android:textSize="25sp"
+        android:textSize="22sp"
         android:layout_gravity="center"
         android:textAlignment="center"
         />

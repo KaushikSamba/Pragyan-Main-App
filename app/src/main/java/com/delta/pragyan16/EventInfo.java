@@ -6,7 +6,6 @@ package com.delta.pragyan16;
 public class EventInfo {
     int id;
     String name, start_time, end_time, venue, date;
-    int maxlimit;
-    String cluster, last_update_time, locx, locy;
+    String cluster, last_update_time;
     String description;
 }
