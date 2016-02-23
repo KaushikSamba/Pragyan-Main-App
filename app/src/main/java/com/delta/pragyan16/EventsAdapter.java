@@ -27,7 +27,6 @@ public class EventsAdapter {
     }
 
     public ArrayList<String> getCluster(){                              //todo get cluster list
-        Log.i("in EventsAdapter","updating cluster list");
         Cluster.clear();
         SQLiteDatabase db = eventsHelper.getWritableDatabase();
         Cursor c = db.query(true, EventsHelper.TABLE_NAME, new String[]{EventsHelper.CLUSTER}, null, null, null, null, null, null);
@@ -45,7 +44,7 @@ public class EventsAdapter {
     public void utilgetAllEvents(){                                               //todo get all events utility function - also used to refresh the list
                 Events.clear();
                 SQLiteDatabase db = eventsHelper.getWritableDatabase();
-                String[] columns = {EventsHelper.EVENTID,EventsHelper.NAME,EventsHelper.START_TIME,EventsHelper.END_TIME,EventsHelper.VENUE,EventsHelper.DATE,EventsHelper.CLUSTER,EventsHelper.MAXLIMIT,EventsHelper.LOCX,EventsHelper.LOCY,EventsHelper.DESCRIP,EventsHelper.LAST_UPDATE_TIME};
+                String[] columns = {EventsHelper.EVENTID,EventsHelper.NAME,EventsHelper.START_TIME,EventsHelper.END_TIME,EventsHelper.VENUE,EventsHelper.DATE,EventsHelper.CLUSTER,EventsHelper.DESCRIP,EventsHelper.LAST_UPDATE_TIME};
                 Cursor cursor = db.query(true, EventsHelper.TABLE_NAME, columns, null, null, null, null, null, null);
                 int index = cursor.getColumnIndex(EventsHelper.NAME);
                 while(cursor.moveToNext()){
@@ -58,9 +57,6 @@ public class EventsAdapter {
                                 eventInfo.start_time = cursor.getString(cursor.getColumnIndex(EventsHelper.START_TIME));
                                 eventInfo.end_time = cursor.getString(cursor.getColumnIndex(EventsHelper.END_TIME));
                                 eventInfo.last_update_time = cursor.getString(cursor.getColumnIndex(EventsHelper.LAST_UPDATE_TIME));
-                                eventInfo.maxlimit = cursor.getInt(cursor.getColumnIndex(EventsHelper.MAXLIMIT));
-                                eventInfo.locx = cursor.getString(cursor.getColumnIndex(EventsHelper.LOCX));
-                                eventInfo.locy = cursor.getString(cursor.getColumnIndex(EventsHelper.LOCY));
                                 eventInfo.venue = cursor.getString(cursor.getColumnIndex(EventsHelper.VENUE));
                                 eventInfo.date = cursor.getString(cursor.getColumnIndex(EventsHelper.DATE));
                                 eventInfo.description = cursor.getString(cursor.getColumnIndex(EventsHelper.DESCRIP));
@@ -93,7 +89,7 @@ public class EventsAdapter {
     public EventInfo getEventInfo(String eventName){                                    //todo get event info
         EventInfo eventInfo = null;
         SQLiteDatabase db = eventsHelper.getWritableDatabase();
-        String[] columns = {EventsHelper.EVENTID,EventsHelper.NAME,EventsHelper.START_TIME,EventsHelper.END_TIME,EventsHelper.VENUE,EventsHelper.DATE,EventsHelper.CLUSTER,EventsHelper.MAXLIMIT,EventsHelper.LOCX,EventsHelper.LOCY,EventsHelper.DESCRIP,EventsHelper.LAST_UPDATE_TIME};
+        String[] columns = {EventsHelper.EVENTID,EventsHelper.NAME,EventsHelper.START_TIME,EventsHelper.END_TIME,EventsHelper.VENUE,EventsHelper.DATE,EventsHelper.CLUSTER,EventsHelper.DESCRIP,EventsHelper.LAST_UPDATE_TIME};
         Cursor cursor = db.query(true, EventsHelper.TABLE_NAME, columns, EventsHelper.NAME + " = ?", new String[]{eventName}, null, null, null, null);
         int index = cursor.getColumnIndex(EventsHelper.NAME);
         while(cursor.moveToNext()){
@@ -105,9 +101,6 @@ public class EventsAdapter {
                 eventInfo.start_time = cursor.getString(cursor.getColumnIndex(EventsHelper.START_TIME));
                 eventInfo.end_time = cursor.getString(cursor.getColumnIndex(EventsHelper.END_TIME));
                 eventInfo.last_update_time = cursor.getString(cursor.getColumnIndex(EventsHelper.LAST_UPDATE_TIME));
-                eventInfo.maxlimit = cursor.getInt(cursor.getColumnIndex(EventsHelper.MAXLIMIT));
-                eventInfo.locx = cursor.getString(cursor.getColumnIndex(EventsHelper.LOCX));
-                eventInfo.locy = cursor.getString(cursor.getColumnIndex(EventsHelper.LOCY));
                 eventInfo.venue = cursor.getString(cursor.getColumnIndex(EventsHelper.VENUE));
                 eventInfo.date = cursor.getString(cursor.getColumnIndex(EventsHelper.DATE));
                 eventInfo.description = cursor.getString(cursor.getColumnIndex(EventsHelper.DESCRIP));
@@ -127,19 +120,14 @@ public class EventsAdapter {
         cv.put(EventsHelper.START_TIME,eventInfo.start_time);
         cv.put(EventsHelper.END_TIME,eventInfo.end_time);
         cv.put(EventsHelper.LAST_UPDATE_TIME,eventInfo.last_update_time);
-        cv.put(EventsHelper.MAXLIMIT,eventInfo.maxlimit);
-        cv.put(EventsHelper.LOCX,eventInfo.locx);
-        cv.put(EventsHelper.LOCY,eventInfo.locy);
         cv.put(EventsHelper.VENUE,eventInfo.venue);
         cv.put(EventsHelper.DATE,eventInfo.date);
         cv.put(EventsHelper.DESCRIP,eventInfo.description);
         int result = db.update(EventsHelper.TABLE_NAME,cv,EventsHelper.NAME+"=?",new String[]{eventInfo.name});
-        Log.i("in EventsAdapter", "updated " + Integer.toString(result));
     }
 
 
     public boolean find_existing(EventInfo eventInfo){
-        Log.i("in EventsAdapter", "find existing called");
         if(eventInfo == null|| eventInfo.name == null || eventInfo.name.isEmpty())
             return false;
         SQLiteDatabase db = eventsHelper.getWritableDatabase();
@@ -151,7 +139,6 @@ public class EventsAdapter {
     }
 
     public void add_event(EventInfo eventInfo){               //to add attendance
-        Log.i("in EventsAdapter","add events called");
         if(eventInfo==null)
             return;
         SQLiteDatabase sqLiteDatabase = eventsHelper.getWritableDatabase();
@@ -163,9 +150,6 @@ public class EventsAdapter {
             cv.put(EventsHelper.START_TIME,eventInfo.start_time);
             cv.put(EventsHelper.END_TIME,eventInfo.end_time);
             cv.put(EventsHelper.LAST_UPDATE_TIME,eventInfo.last_update_time);
-            cv.put(EventsHelper.MAXLIMIT,eventInfo.maxlimit);
-            cv.put(EventsHelper.LOCX,eventInfo.locx);
-            cv.put(EventsHelper.LOCY,eventInfo.locy);
             cv.put(EventsHelper.VENUE,eventInfo.venue);
             cv.put(EventsHelper.DATE,eventInfo.date);
             cv.put(EventsHelper.DESCRIP,eventInfo.description);
@@ -188,13 +172,10 @@ public class EventsAdapter {
         private static final String END_TIME = "end_time";
         private static final String VENUE = "venue";
         private static final String DATE = "date";
-        private static final String MAXLIMIT = "maxlimit";
         private static final String CLUSTER = "cluster";
         private static final String LAST_UPDATE_TIME = "last_update_time";
-        private static final String LOCX = "locx";
-        private static final String LOCY = "locy";
         private static final String DESCRIP = "description";
-        private static final String create = "CREATE TABLE "+TABLE_NAME+" ("+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+EVENTID+" INTEGER, "+NAME+" TEXT, "+START_TIME+" TEXT, "+END_TIME+" TEXT, "+VENUE+" TEXT, "+DATE+" TEXT, "+CLUSTER+" TEXT, "+MAXLIMIT+" INTEGER, "+LOCX+" TEXT, "+LOCY+" TEXT, "+DESCRIP+" TEXT, "+LAST_UPDATE_TIME+" TEXT);";
+        private static final String create = "CREATE TABLE "+TABLE_NAME+" ("+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+EVENTID+" INTEGER, "+NAME+" TEXT, "+START_TIME+" TEXT, "+END_TIME+" TEXT, "+VENUE+" TEXT, "+DATE+" TEXT, "+CLUSTER+" TEXT, "+DESCRIP+" TEXT, "+LAST_UPDATE_TIME+" TEXT);";
         private static final String drop = "DROP TABLE IF EXISTS "+TABLE_NAME+";";
         public EventsHelper(Context context)
         {

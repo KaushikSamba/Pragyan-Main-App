@@ -45,6 +45,7 @@ public class LoginActivity extends ActionBarActivity {
         Button signInButton = (Button) findViewById(R.id.signInButton);
         TextView registerText = (TextView) findViewById(R.id.registerText);
 
+
         final EditText emailIdEdit, passwordEdit;
         emailIdEdit = (EditText) findViewById(R.id.emailIdEdit);
         passwordEdit = (EditText) findViewById(R.id.password);
@@ -117,6 +118,7 @@ public class LoginActivity extends ActionBarActivity {
                                     Utilities.pragyan_pass = passwordString;
                                     editor.apply();
 
+
                                     break;
 
                                 case 3:
@@ -152,7 +154,6 @@ public class LoginActivity extends ActionBarActivity {
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         postRequest.setRetryPolicy(policy);
         Volley.newRequestQueue(this).add(postRequest);
-
     }
 
 

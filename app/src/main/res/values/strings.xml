@@ -13,7 +13,7 @@
     <string name="register">Register</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_qrscreen">QRScreen</string>
-    <string name="Love"><![CDATA[Made with <3 by Delta Force]]></string>
+    <string name="Love">Made with \u2665 by Delta Force</string>
     <string name="title_activity_login">Sign in</string>
     <string name="title_activity_register">Registration</string>
 </resources>

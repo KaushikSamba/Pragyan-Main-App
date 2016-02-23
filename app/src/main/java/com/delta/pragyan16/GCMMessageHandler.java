@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class GCMMessageHandler extends IntentService {
 
-    String mes;
+    String mes,title;
 
     public GCMMessageHandler() {
         super("GCMMessageHandler");
@@ -37,23 +37,22 @@ public class GCMMessageHandler extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
-
+        title = extras.getString("title");
         mes = extras.getString("data");
-        //clear(mes);//adding to db
-        //Log.d("gcm_status", mes);
-        //generateNotification(getApplicationContext(), mes);
+        Log.d("gcm_status", mes);
+        Log.d("gcm_status_title",title);
         if(mes!=null)
-            gn(getApplicationContext(),mes);
+            gn(getApplicationContext(),mes,title);
     }
 
-    private static void gn(Context context,String newMessage)
+    private static void gn(Context context,String newMessage,String title)
     {
 
         if (newMessage != null) {
             NotificationCompat.Builder mBuilder =
 
-                    new NotificationCompat.Builder(context)//   .setSmallIcon(R.drawable.festember_logo_old) TODO Pragyan logo
-                            .setContentTitle("Pragyan 2016")
+                    new NotificationCompat.Builder(context).setSmallIcon(R.drawable.webwheel)
+                            .setContentTitle(title)
                             .setContentText(newMessage)
                             .setDefaults(Notification.DEFAULT_ALL)
                             .setLights(Color.GREEN, 500, 500);
@@ -64,12 +63,10 @@ public class GCMMessageHandler extends IntentService {
             DBController controller = new DBController(context);
             HashMap<String, String> queryValues = new HashMap<String, String>();
 
-            // Add departmentName extracted from Object
             Calendar c = Calendar.getInstance();
             String currentDateandTime = new SimpleDateFormat("HH:mm").format(new Date());
             // date = c.get(Calendar.DATE);
             queryValues.put("notifText",newMessage);
-            //String t=String.valueOf(c.get(Calendar.HOUR))+":"+String.valueOf(c.get(Calendar.MINUTE))+" , Day "+String.valueOf(c.get(Calendar.DATE)-25);
             String t=currentDateandTime+" , Day "+String.valueOf(c.get(Calendar.DATE)-24);
             Log.e("time",t);
             queryValues.put("time",t);
@@ -106,15 +103,15 @@ public class GCMMessageHandler extends IntentService {
             // This ensures that navigating backward from the Activity leads out
             // of
             // your application to the Home screen.
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+     //       TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
             // Adds the back stack for the Intent (but not the Intent itself)
      //       stackBuilder.addParentStack(Notify.class);            TODO GET notify class intent
             // Adds the Intent that starts the Activity to the top of the stack
 
        //     stackBuilder.addNextIntent(resultIntent);              TODO GET notify class intent
-            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
-                    0, PendingIntent.FLAG_UPDATE_CURRENT);
-            mBuilder.setContentIntent(resultPendingIntent);
+//            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
+//                    0, PendingIntent.FLAG_UPDATE_CURRENT);
+//            mBuilder.setContentIntent(resultPendingIntent);
 
             NotificationManager mNotificationManager = (NotificationManager) context
                     .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -135,34 +132,4 @@ public class GCMMessageHandler extends IntentService {
 
     }
 
-    private static void generateNotification(Context context, String message) {
-        int icon = 0;// = R.drawable.festember_logo_old;            todo pragyan logo
-        long when = System.currentTimeMillis();
-        NotificationManager notificationManager = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification;
-        notification = new Notification(icon, "Pragyan", when);
-        String title = message;
-
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        // set intent so it does not start a new activity
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent intent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        //notification.setLatestEventInfo(context,"CampusComm", message, intent);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        // Play default notification sound
-        notification.defaults |= Notification.DEFAULT_SOUND;
-
-        // Vibrate if vibrate is enabled
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(666, notification);
-    }
-
-    public void clear(String not) {
-        /*MyDBHandler dbHandler = new MyDBHandler(getApplicationContext(), null, null, 1);
-        dbHandler.addName(not, "posts");*/
-    }
 }

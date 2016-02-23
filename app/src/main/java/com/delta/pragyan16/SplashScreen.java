@@ -13,15 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -35,15 +27,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.xml.transform.ErrorListener;
 
 public class SplashScreen extends Activity {
 
@@ -61,7 +44,7 @@ public class SplashScreen extends Activity {
         setContentView(R.layout.activity_splash_screen);
         GetEventsAPI g = new GetEventsAPI(SplashScreen.this, getApplicationContext());
         g.execute();
-        gcmreg();
+        GCMRegisterService.register(this);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -160,65 +143,6 @@ public class SplashScreen extends Activity {
 
     }
 
-    public void gcmreg() {
-
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register("835229264934");
-                    Log.e("gcm_status", "registering device (regId = " + regid + ")");
-                    //        String serverUrl = Utilities.url_gcm;     TODO SERVERURL
-                    String serverUrl = "";                             //    TODO  GCM URL
-                    Log.e("gcm_status", "Attempt to register");
-                    StringRequest stringRequest = new StringRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            msg = response;
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            error.printStackTrace();
-                            Log.e("gcm_status", "Failed to register :" + error);
-                            SplashScreen.this.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(SplashScreen.this, "Please check your internet and try again", Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
-                    }){
-                        @Override
-                        protected Map<String, String> getParams()
-                        {
-                            Map<String, String> params = new HashMap<>();
-                            // the POST parameters:
-                            //params.put("fes_id", Utilities._id); todo proper params
-                            params.put("gcm_id", regid);
-                            return params;
-                        }
-                    };
-                    // Add the request to the queue
-                    int socketTimeout = 10000;//10 seconds
-                    RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-                    stringRequest.setRetryPolicy(policy);
-                    Volley.newRequestQueue(SplashScreen.this).add(stringRequest);
-
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-                    Log.e("gcm_status", msg);
-                }
-                return msg;
-            }
-        }.execute(null, null, null);
-    }
-
-
-
     class GetEventsAPI extends AsyncTask<Void, Void, Boolean> {                            //   todo call once if the database is empty
         //ProgressDialog dialog;
         JSONObject jsonObject = null, descriptionObject = null;
@@ -310,13 +234,10 @@ public class SplashScreen extends Activity {
                         EventInfo eventInfo = new EventInfo();
                         eventInfo.name = tempjsonObject.getString("event_name");
                         eventInfo.id = tempjsonObject.getInt("event_id");
-                        eventInfo.cluster = tempjsonObject.getString("event_cluster");
+                        eventInfo.cluster = tempjsonObject.getString("event_cluster").toUpperCase();
                         eventInfo.start_time = tempjsonObject.getString("event_start_time");
                         eventInfo.end_time = tempjsonObject.getString("event_end_time");
                         eventInfo.last_update_time = tempjsonObject.getString("event_last_update_time");
-                        eventInfo.maxlimit = tempjsonObject.getInt("event_max_limit");
-                        eventInfo.locx = tempjsonObject.getString("event_loc_x");
-                        eventInfo.locy = tempjsonObject.getString("event_loc_y");
                         eventInfo.venue = tempjsonObject.getString("event_venue");
                         eventInfo.date = tempjsonObject.getString("event_date");
                         eventInfo.description = tempdescObject.getString("event_desc");

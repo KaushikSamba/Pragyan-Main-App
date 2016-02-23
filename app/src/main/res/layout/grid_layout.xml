@@ -7,7 +7,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="130dp"
         android:layout_gravity="center"
         android:foreground="?android:attr/selectableItemBackground"
         card_view:cardCornerRadius="4dp"
@@ -15,11 +15,14 @@
         android:layout_margin="2dp">
         <TextView
             android:id="@+id/gridText"
-            android:textSize="20sp"
+            android:textSize="18sp"
+            android:textAlignment="center"
             android:layout_margin="20dp"
             android:layout_width="wrap_content"
+            android:gravity="center_horizontal"
             android:layout_gravity="center"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:autoText="false" />
 
     </android.support.v7.widget.CardView>
 

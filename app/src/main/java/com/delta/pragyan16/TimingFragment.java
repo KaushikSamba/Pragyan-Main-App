@@ -69,6 +69,21 @@ public class TimingFragment extends Fragment {
         endTime.setText(eventInfo.end_time);
         TextView date = (TextView)v. findViewById(R.id.eventDate);
         date.setText(eventInfo.date);
+        TextView day = (TextView) v.findViewById(R.id.eventDay);
+        switch(eventInfo.date){
+            case "2016-02-28":
+                day.setText("Day 3");
+                break;
+            case "2016-02-27":
+                day.setText("Day 2");
+                break;
+            case "2016-02-26":
+                day.setText("Day 1");
+                break;
+            default:
+                day.setText("Day 0");
+
+        }
         TextView venue = (TextView)v. findViewById(R.id.eventVenue);
         venue.setText(eventInfo.venue);
         return v;
